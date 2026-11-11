@@ -291,7 +291,12 @@
 <!-- AWARD -->
 <section id="awards" class="px-5 pb-24">
   <div class="reveal mx-auto grid max-w-6xl items-center gap-12 rounded-3xl border border-line bg-card p-8 md:grid-cols-2 md:p-12">
-    <img src="wq.jpg" alt="Project of the Month award" class="w-full rounded-2xl border border-line">
+    <button type="button" id="awardOpen" class="group relative block w-full overflow-hidden rounded-2xl border border-line" aria-label="View award image full screen">
+      <img src="wq.jpg" alt="Project of the Month award" class="w-full transition duration-500 group-hover:scale-105">
+      <span class="absolute inset-0 flex items-center justify-center bg-ink/0 transition duration-300 group-hover:bg-ink/50">
+        <span class="flex translate-y-3 items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-ink opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100"><i class="fa-solid fa-expand"></i> View full image</span>
+      </span>
+    </button>
     <div>
       <span class="mb-4 inline-flex items-center gap-2 rounded-full bg-warm px-4 py-1.5 text-sm font-semibold text-ink"><i class="fa-solid fa-trophy"></i> Aptech Learning, February</span>
       <h2 class="font-display text-4xl font-bold text-white">Awarded <span class="text-accent">Project of the Month</span></h2>
@@ -354,6 +359,12 @@
 <footer class="border-t border-line px-5 py-10 text-center text-sm text-slate-400">
   <p class="font-display font-semibold text-white">&copy; 2026 Shaikh Habib ur Rehman</p>
 </footer>
+
+<!-- IMAGE LIGHTBOX -->
+<div id="lightbox" class="fixed inset-0 z-[9998] hidden items-center justify-center bg-black/90 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Award image">
+  <button id="lightboxClose" class="absolute right-5 top-5 grid h-12 w-12 place-items-center rounded-full bg-white/10 text-xl text-white transition hover:bg-white/20" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+  <img id="lightboxImg" src="wq.jpg" alt="Project of the Month award" class="max-h-[90vh] max-w-full rounded-xl object-contain shadow-2xl">
+</div>
 
 <!-- FIXED WHATSAPP -->
 <a href="https://wa.me/923306669162?text=Assalam%20o%20Alaikum%20Habib%2C%20I%20want%20to%20discuss%20a%20project." target="_blank" rel="noopener" aria-label="Chat on WhatsApp" class="fixed bottom-6 right-6 z-50 grid h-14 w-14 place-items-center rounded-full bg-wa text-3xl text-white shadow-[0_10px_30px_rgba(37,211,102,.5)] transition hover:scale-110">
@@ -440,6 +451,16 @@
     if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); }
   }), { threshold: .15 });
   document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  // Award image lightbox
+  const lb = document.getElementById('lightbox');
+  const closeLb = () => { lb.classList.add('hidden'); lb.classList.remove('flex'); document.body.style.overflow = ''; };
+  document.getElementById('awardOpen').addEventListener('click', () => {
+    lb.classList.remove('hidden'); lb.classList.add('flex'); document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('lightboxClose').addEventListener('click', closeLb);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 
   // Contact form -> WhatsApp
   document.getElementById('contactForm').addEventListener('submit', e => {
